@@ -1,17 +1,17 @@
-#!/usr/bin/python2.7
-
+import os
 names = []
 globalOptions = []
+header = 'Plaintext Database '
 
 class menu:
+
     def __init__(self, name, options):
         self.name = name
         self.options = options
-
         names.append([self, name])
         for o in options:
             optionsArray = []
-            optionsArray.append([self, o])
+            optionsArray.append([self, menuItem(o[0], o[1])])
             globalOptions.append(optionsArray)
 
     def getName(self):
@@ -25,19 +25,58 @@ class menu:
         for o in globalOptions:
             if o[0][0] == self:
                 optionsArray.append(o[0][1])
+
         return optionsArray
 
     def displayOptions(self):
         i = 1
         for o in self.getOptions():
-            print(str(i) + ". " + o)
+            print str(i) + '. ' + o.text
             i += 1
-    
+
     def displayName(self):
         print self.getName()
-        
-# DEBUG          
-menu1 = menu("Test Menu", ["Test 1", "Test 2", "Test 3"])
-menu1.displayName()
-print("")
-menu1.displayOptions()
+
+    def displayMenu(self):
+        clear()
+        displayHeader(self)
+        self.displayOptions()
+
+
+class menuItem:
+
+    def __init__(self, text, function):
+        self.text = text
+        self.function = function
+
+
+def displayHeader(menu):
+    print header + '- ' + menu.getName()
+    print ''
+
+
+def clear():
+    if os.name == 'nt':
+        clr = 'cls'
+    else:
+        clr = 'clear'
+    os.system(clr)
+
+
+def choice(menu):
+    print ''
+    print 'Choose an Option:'
+    try:
+        option = input('Option: ')
+        i = 0
+        for o in menu.getOptions():
+            if i == option - 1:
+                return o.function
+            i += 1
+
+    except:
+        clear()
+        menu.displayMenu()
+        print ''
+        print 'Option does not exist!'
+        choice(menu)
