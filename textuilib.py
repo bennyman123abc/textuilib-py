@@ -1,10 +1,9 @@
 import os
 names = []
 globalOptions = []
-header = 'Plaintext Database '
+header = []
 
 class menu:
-
     def __init__(self, name, options):
         self.name = name
         self.options = options
@@ -41,17 +40,53 @@ class menu:
         clear()
         displayHeader(self)
         self.displayOptions()
+        if self.getOptions() != []:
+            option = choice(self)
+            return option
+
+    def addMenuItem(self, item):
+        if isinstance(item, menuItem):
+            optionsArray = []
+            optionsArray.append([self, item])
+            globalOptions.append(optionsArray)
+        else:
+            try:
+                raise TypeMismatch("item is not type menuItem")
+            except TypeMismatch as problem:
+                print("TypeMismatch: {0}".format(problem))
+
+    def clearMenuItems(self):
+        for o in globalOptions:
+            if o[0][0] == self:
+                globalOptions.remove(o)
 
 
 class menuItem:
-
     def __init__(self, text, function):
         self.text = text
         self.function = function
 
+class TypeMismatch(Exception):
+    def __init__(self, mismatch):
+        Exception.__init__(self, mismatch)
+
+def setHeader(h):
+    try:
+        header.remove(header[0])
+        if h[len(h)] != " ":
+            h = h + " "
+            header.append(h)
+        else:
+            header.append(h)
+    except:
+        if h[len(h) - 1] != " ":
+            h = h + " "
+            header.append(h)
+        else:
+            header.append(h)
 
 def displayHeader(menu):
-    print header + '- ' + menu.getName()
+    print header[0] + '- ' + menu.getName()
     print ''
 
 
@@ -74,9 +109,12 @@ def choice(menu):
                 return o.function
             i += 1
 
+    except (KeyboardInterrupt, SystemExit):
+        raise
+
     except:
-        clear()
-        menu.displayMenu()
-        print ''
-        print 'Option does not exist!'
-        choice(menu)
+        return
+
+#DEBUG
+
+#testmenu = menu("Test Menu", [("Option 1", "1"), ("Option 2", "2")])
