@@ -54,7 +54,7 @@ class menu:
             
 class menuItem:
     def __init__(self, text, function):
-        if isinstance(text, str) && isinstance(function, str):
+        if isinstance(text, str) and isinstance(function, str):
             self.text = text
             self.function = function
             
