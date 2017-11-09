@@ -22,14 +22,12 @@ class menu:
         return self.menuItems
     
     def displayOptions(self):
-        i = 1
-        for o in self.menuItems:
+        for i, o in enumerate(self.menuItems):
             if isinstance(o, menuItem):
-                print(str(i) + ". " + o.text)
-                i += 1
+                print(str(i+1) + ". " + o.text)
     
     def displayName(self):
-        print self.name
+        print(self.name)
         
     def displayMenu(self):
         clear()
@@ -38,11 +36,11 @@ class menu:
         if self.menuItems != []:
             return choice(self)
         
-    def addMenuItem(self, item):
+    def addMenuItem(self, item): #Takes a menuItem, not an int
         if isinstance(item, menuItem):
             self.menuItems.append(item)
             
-    def removeMenuItem(self, item):
+    def removeMenuItem(self, item): #Takes a menuItem, not an int
         if isinstance(item, menuItem):
             for o in self.menuItems:
                 if item == o:
@@ -78,8 +76,8 @@ def setHeader(h):
             header.append(h)
 
 def displayHeader(menu):
-    print header[0] + '- ' + menu.getName()
-    print ''
+    print(header[0] + '- ' + menu.getName())
+    print()
 
 def clear():
     if os.name == 'nt':
@@ -89,18 +87,15 @@ def clear():
     os.system(clr)
 
 def choice(menu):
-    print ''
-    print 'Choose an Option:'
+    print('')
+    print('Choose an Option:')
     try:
-        option = input('Option: ')
-        i = 0
-        for o in menu.menuItems:
-            if i == option - 1:
-                return o.function
-            i += 1
+        while True:
+            option = int(input('Option: '))
+            if option-1 < len(menu.menuItems):
+                return menu.menuItems[option-1].function
+            else:
+                print("Invalid option!")
 
     except (KeyboardInterrupt, SystemExit):
         raise
-
-    except:
-        return
